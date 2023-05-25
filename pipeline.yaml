@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: sample-pipeline
+spec:
+  params:
+  workspaces:
+    - name: cloned
+  tasks:
+    - name: sample-task
+      taskRef:
+        name: sample-task
+      params:
+      workspaces:
+      - name: cloned
+    - name: sample-python-task
+      taskRef: 
+        name: sample-python-task
+      params:
+      workspaces:
+      - name: cloned
+      runAfter:
+        - sample-task
+   

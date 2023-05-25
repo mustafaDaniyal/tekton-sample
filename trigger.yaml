@@ -1,0 +1,45 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: sample-manual-trigger-template
+spec:
+  params:
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+      name: sample-pipeline-run
+    spec:
+      workspaces:
+        - name: cloned
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 1Gi
+      pipelineRef:
+        name: sample-pipeline
+      params:
+
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: sample-manual-trigger-binding
+spec:
+  params:
+  
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: sample-manual-run
+spec:
+  triggers:
+    - binding:
+        name: sample-manual-trigger-binding
+      template:
+        name: sample-manual-trigger-template
